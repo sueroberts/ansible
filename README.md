@@ -1,3 +1,3 @@
 # ansible
 
-Testing ansible.
+Testing ansible for lab use.
