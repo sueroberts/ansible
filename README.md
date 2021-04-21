@@ -1,3 +1,3 @@
 # ansible
 
-Testing ansible for lab use.
+This repository contains code that is used for testing ansible for lab use.
