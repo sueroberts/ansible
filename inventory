@@ -1,5 +1,11 @@
 ##IP or FQDN
+[web_servers]
 192.168.20.79
 192.168.20.80
 192.168.20.81
 
+[db_servers]
+
+[file_servers]
+
+[workstations]
