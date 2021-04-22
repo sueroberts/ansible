@@ -4,36 +4,20 @@
   become: true
   tasks:
 
-  - name: Update repository index
+  - name: Install apache2 and php support packages for Debian and Ubuntu
     apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
       update_cache: yes
-    when: ansible_distribution in ["Debian", "Ubuntu"] 
+    when: ansible_distribution in ["Debian", "Ubuntu"]
 
-  - name: Install apache2 package
-    apt:
-      name: apache2
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-  - name: Add php support for apache2
-    apt:
-      name: libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"    
-
-  - name: Update repository index
+ - name: Install apache/httpd and php support packages for CentOS
     dnf:
-      update_cache: yes
-    when: ansible_distribution =="CentoS"
-
- - name: Install apache/httpd package
-    dnf:
-      name: httpd
+      name: 
+        - httpd
+        - php
       state: latest
-    when: ansible_distribution == "CentoS" 
-
-  - name: Add php support for apache/httpd
-    dnf:
-      name: php
-      state: latest
-    when: ansible_distribution == "CentOS"
+      update_cache: yes 
+   when: ansible_distribution == "CentoS"
