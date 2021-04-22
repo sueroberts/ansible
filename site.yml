@@ -6,23 +6,26 @@
   pre_tasks:
 
   - name: install updates (Debian and Ubuntu)
+    tags: always
     apt:
       upgrade: dist
       update_cache: yes
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: install updates (CentOS)
+    tags: always
     dnf:
       update_only: yes
       update_cache: yes
     when: ansible_distribution == "CentoS"
 
-# This play installs apache and php supports on all hosts identified as web servers
+# This play installs apache and php support on all hosts identified as web servers
 - hosts: web_servers
   become: true
   tasks:
 
   - name: Install apache and php support packages for Debian and Ubuntu
+    tags: apache,apache2,Debian,Ubuntu
     apt:
       name:
         - apache2
@@ -31,6 +34,7 @@
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install apache or httpd and php support packages for CentOS
+    tags: apache,apache2,CentOS
     dnf:
       name: 
         - httpd
@@ -44,12 +48,14 @@
   tasks:
 
   - name: Install mariadb packages for Debian and Ubuntu
+    tags: mariadb,mariadb-server,Debian,Ubuntu
     apt:
       name: mariadb-server
       state: latest
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install mariadb packages for CentOS
+    tags: mariadb,CentOS
     dnf:
       name: mariadb
       state: latest
@@ -61,6 +67,7 @@
   tasks:
 
   - name: Install samba package
+    tags: samba
     package: 
       name: samba
       state: latest
