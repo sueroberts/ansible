@@ -19,7 +19,7 @@
       update_cache: yes
     when: ansible_distribution == "CentoS"
 
-# This play adds the ann (ansible) user and ssh key
+# This play adds the ann (ansible) user and the associated ssh key
 - hosts: all
   become: true
   tasks:
