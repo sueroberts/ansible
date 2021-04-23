@@ -19,6 +19,51 @@
       update_cache: yes
     when: ansible_distribution == "CentoS"
 
+# This play adds the ann (ansible) user and ssh key
+- hosts: all
+  become: true
+  tasks:
+    
+  - name: Create user ann
+    tags: always
+    user:
+      name: ann
+      groups: root
+
+  - name: Add ssh key for ann
+    tags: always
+    authorized_key:
+      user: ann
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII8wkSZmxGCLrBxD2vaIpa+Ljda1xUROvc05zan+DvUj ansible default"
+
+  - name: Add sudoers file for ann
+    tags: always
+    copy:
+      src: sudoer_ann
+      dest: /etc/sudoers.d/ann
+      owner: root
+      group: root
+      mode: 0440
+
+
+# This sets up terraform on new workstations
+- hosts: workstations
+  become: true
+  tasks:
+
+  - name: Install unzip
+    package: 
+      name: unzip
+
+  - name: Install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/0.15.0/terraform_0.15.0_linux_amd64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
+
 # This play installs apache and php support on all hosts identified as web servers
 - hosts: web_servers
   become: true
@@ -34,7 +79,7 @@
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: Install apache or httpd and php support packages for CentOS
-    tags: apache,apache2,CentOS
+    tags: apache,httpd,CentOS
     dnf:
       name: 
         - httpd
@@ -42,7 +87,17 @@
       state: latest 
     when: ansible_distribution == "CentoS"
 
-# Directory 'files' is assumed
+# This play starts and enables the httpd service on CentOS web_servers
+  - name: Start httpd on CentOS web_servers
+    tags: apache,httpd,CentOS
+    service: 
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentoS"
+
+
+# This installs the default website file. Directory 'files' is assumed
   - name: Copy default html file for website
     tags: apache,apache2,httpd
     copy:
