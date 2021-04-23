@@ -1,13 +1,14 @@
 ##IP or FQDN
 [web_servers]
 192.168.20.79
-192.168.20.80
-192.168.20.81
+192.168.20.95
 
 [db_servers]
+192.168.20.80
 
 [file_servers]
 
 [freebsd]
 
 [workstations]
+192.168.20.81
